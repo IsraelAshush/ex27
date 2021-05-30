@@ -56,33 +56,36 @@ def handle_client_request(command, params):
         response: the requested data
 
     """
-    response = 'FATAL'
+    response = ''
     if command == 'DIR':
-        path = r'%s' % params
-        response = glob.glob(path)
+        path = params[0] + '\\*'
+        response = str(glob.glob(path))
     elif command == 'DELETE':
-        path = r'%s' % params
-        if os.remove(path):
+        path = params[0]
+        os.remove(path)
+        if not os.path.exists(path):
             response = 'OK'
     elif command == 'EXECUTE':
-        path = r'%s' % params
+        path = params[0]
         if not os.path.exists(path):
             response = 'FILE NOT EXIST'
             return response
         if subprocess.call(path):
             response = 'OK'
     elif command == 'COPY':
-        path_old = r'%s' % params[0]
-        path_new = r'%s' % params[1]
-        if shutil.copy(path_old, path_new):
+        path_old = params[0]
+        path_new = params[1]
+        shutil.copy(path_old, path_new)
+        if os.path.exists(path_new):
             response = 'OK'
     elif command == 'TAKE_SCREENSHOT':
         image = pyautogui.screenshot()
-        if image.save(SCREENSHOT_PATH):
+        image.save(SCREENSHOT_PATH)
+        if os.path.exists(SCREENSHOT_PATH):
             response = 'OK'
     elif command == 'SEND_PHOTO':
         size = os.stat(SCREENSHOT_PATH).st_size
-        response = size
+        response = str(size)
 
     # (7)
 
@@ -112,7 +115,7 @@ def main():
                 # add length field using "create_msg"
                 response = protocol.create_msg(response)
                 # send to client
-                client_socket.send(str(response).encode())
+                client_socket.send(response)
                 if command == 'SEND_PHOTO':
                     # Send the data itself to the client
                     with open(SCREENSHOT_PATH, 'rb') as send_image:

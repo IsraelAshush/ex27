@@ -1,6 +1,12 @@
 #   Ex. 2.7 template - protocol
 
-
+#DIR C:\Networks
+#DELETE C:\Networks\Pyhton3.8\gitme\net\ex27\photo_server\client.py
+#COPY C:\Networks\Pyhton3.8\gitme\net\ex27\photo_server\client.py C:\Networks\Pyhton3.8\gitme\net\ex27\photo_client\client_new.py
+#EXECUTE C:\Notepad++\notepad++.exe
+#TAKE_SCREENSHOT
+#SEND_PHOTO
+#EXIT
 LENGTH_FIELD_SIZE = 4
 PORT = 8820
 LIST_COMMAND = ['DIR', 'DELETE', 'COPY', 'EXECUTE', 'SEND_PHOTO', 'TAKE_SCREENSHOT', 'EXIT']
@@ -46,6 +52,6 @@ def get_msg(my_socket):
     length = my_socket.recv(4).decode()
     if not length.isdigit():
         return False, "Error"
-    message = my_socket.recv(int(length))
+    message = my_socket.recv(int(length)).decode()
     # (5)
     return True, message

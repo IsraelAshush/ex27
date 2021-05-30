@@ -22,8 +22,8 @@ def handle_server_response(my_socket, cmd):
     length = my_socket.recv(4).decode()
     # (10) treat SEND_PHOTO
     if cmd == 'SEND_PHOTO':
-        length = my_socket.recv(4).decode()
-        image = my_socket.recv(int(length)).decode()
+        length = my_socket.recv(int(length)).decode()
+        image = my_socket.recv(int(length))
         with open(SAVED_PHOTO_LOCATION, 'wb') as output_file:
             output_file.write(image)
     else:
